@@ -58,8 +58,8 @@ public class SensorController {
 
 
     @PostMapping(value = "/sensors/{id}")
-    public ResponseEntity deleteById(@PathVariable Long id, @Valid @RequestBody SensorRequestDto dto) {
-        service.delete(id, dto);
+    public ResponseEntity deleteById(@PathVariable Long id) {
+        service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

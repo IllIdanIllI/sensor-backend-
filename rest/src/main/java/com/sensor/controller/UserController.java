@@ -1,6 +1,6 @@
 package com.sensor.controller;
 
-import com.sensor.repository.UserDao;
+import com.sensor.dao.UserDao;
 import com.sensor.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

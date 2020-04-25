@@ -71,6 +71,8 @@ public class HibernateConfiguration {
         hibernateProperties.setProperty(Environment.DIALECT, dialect);
         hibernateProperties.setProperty(Environment.SHOW_SQL, showSql);
         hibernateProperties.setProperty(Environment.DEFAULT_SCHEMA, schema);
+        hibernateProperties.setProperty("hibernate.search.default.directory_provider", "filesystem");
+        hibernateProperties.setProperty("hibernate.search.default.indexBase", "/indexes");
         return hibernateProperties;
     }
 }
