@@ -1,9 +1,7 @@
 package com.sensor.model;
 
 import com.sensor.model.type.UserRole;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -11,22 +9,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "user")
-@Getter
-@Setter
-@EqualsAndHashCode
-//@EqualsAndHashCode(callSuper = true)
-//@AttributeOverride(name = "id", column = @Column(columnDefinition = "integer"))
+@Data
 public class User implements Serializable {
-
-//    @Override
-//    @Access(AccessType.PROPERTY)
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userIdSequencer")
-//    @SequenceGenerator(name = "userIdSequencer", sequenceName = "user_id_seq", allocationSize = 1)
-//    public Long getId() {
-//        return super.getId();
-//    }
-
 
     @Id
     @Column

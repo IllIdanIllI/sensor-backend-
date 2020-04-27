@@ -6,9 +6,7 @@ import com.sensor.model.type.SensorType;
 import com.sensor.model.type.UnitType;
 import com.vladmihalcea.hibernate.type.range.PostgreSQLRangeType;
 import com.vladmihalcea.hibernate.type.range.Range;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.search.annotations.Field;
@@ -21,9 +19,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "sensor")
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @AttributeOverride(name = "id", column = @Column(columnDefinition = "integer"))
 @TypeDef(
         typeClass = PostgreSQLRangeType.class,
@@ -31,15 +27,6 @@ import java.io.Serializable;
 )
 @Indexed
 public class Sensor implements Serializable {
-
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sensorIdSequencer")
-//    @SequenceGenerator(name = "sensorIdSequencer", sequenceName = "sensor_id_seq", allocationSize = 1)
-//    @Column
-//    @Access(AccessType.PROPERTY)
-//    @Override
-//    public Long getId() {
-//        return super.getId();
-//    }
 
     @Id
     @Column
@@ -63,17 +50,15 @@ public class Sensor implements Serializable {
     private String location;
 
     @Column
-    @Field(bridge = @FieldBridge(impl = UnitTypeBridge.class))
-//    @Convert(converter = UnitTypeConverter.class)
     @Enumerated(EnumType.STRING)
     @Type(type = "com.sensor.converter.type.UnitEnumType")
+    @Field(bridge = @FieldBridge(impl = UnitTypeBridge.class))
     private UnitType unit;
 
     @Column
-    @Field(bridge = @FieldBridge(impl = SensorTypeBridge.class))
-//    @Convert(converter = SensorTypeConverter.class)
     @Enumerated(EnumType.STRING)
     @Type(type = "com.sensor.converter.type.SensorEnumType")
+    @Field(bridge = @FieldBridge(impl = SensorTypeBridge.class))
     private SensorType type;
 
     @Column
