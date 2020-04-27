@@ -65,8 +65,8 @@ public abstract class GenericDao<T extends Serializable, N> {
     }
 
     @Transactional
-    public void save(T entity) {
-        getSession().save(entity);
+    public Long save(T entity) {
+        return (Long) getSession().save(entity);
     }
 
     @Transactional

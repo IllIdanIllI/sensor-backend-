@@ -8,7 +8,7 @@ public interface SensorDao {
 
     Sensor findById(long id);
 
-    void save(Sensor entity);
+    Long save(Sensor entity);
 
     void delete(Sensor entity);
 
