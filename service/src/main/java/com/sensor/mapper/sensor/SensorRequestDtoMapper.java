@@ -18,8 +18,8 @@ public class SensorRequestDtoMapper extends EntityMapper<Sensor, SensorRequestDt
         sensor.setModel(dto.getModel());
         sensor.setRange(Range.closed(dto.getRangeFrom(), dto.getRangeTo()));
         sensor.setLocation(dto.getLocation());
-        sensor.setUnit(UnitType.valueOf(dto.getUnit()));
-        sensor.setType(SensorType.valueOf(dto.getUnit()));
+        sensor.setUnit(UnitType.typeValueOf(dto.getUnit()));
+        sensor.setType(SensorType.typeValueOf(dto.getType()));
         sensor.setDescription(dto.getDescription());
         return sensor;
     }

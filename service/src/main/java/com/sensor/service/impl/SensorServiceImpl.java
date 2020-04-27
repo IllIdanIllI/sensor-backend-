@@ -1,10 +1,10 @@
 package com.sensor.service.impl;
 
+import com.sensor.dao.SensorDao;
 import com.sensor.dto.request.SensorRequestDto;
 import com.sensor.dto.responce.PaginationResponseDto;
-import com.sensor.exception.SensorValidationException;
-import com.sensor.repository.SensorDao;
 import com.sensor.dto.responce.SensorResponseDto;
+import com.sensor.exception.SensorValidationException;
 import com.sensor.mapper.EntityMapper;
 import com.sensor.model.Sensor;
 import com.sensor.service.SensorService;
@@ -50,7 +50,7 @@ public class SensorServiceImpl implements SensorService {
         if (dto.getRangeFrom() > dto.getRangeTo()) {
             throw new SensorValidationException("Invalid range, field \'from\' lower that field \'to\'");
         }
-        return dao.save(sensorRequestDtoMapper.map(dto)).getId();
+        return dao.save(sensorRequestDtoMapper.map(dto));
     }
 
     @Override
