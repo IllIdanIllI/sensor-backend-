@@ -1,5 +1,6 @@
 package com.sensor.config;
 
+import com.sensor.security.config.ApplicationSecurityConfiguration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class ApplicationInitializer extends
@@ -7,12 +8,12 @@ public class ApplicationInitializer extends
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{HibernateConfiguration.class};
+        return new Class[]{HibernateConfiguration.class, ApplicationSecurityConfiguration.class, WebConfiguration.class};
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[]{WebConfiguration.class};
+        return null;
     }
 
     @Override

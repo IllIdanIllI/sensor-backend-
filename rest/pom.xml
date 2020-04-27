@@ -15,8 +15,10 @@
     <dependencies>
         <dependency>
             <groupId>com.sensor</groupId>
-            <artifactId>service</artifactId>
+            <artifactId>security</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+
     </dependencies>
 </project>
