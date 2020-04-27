@@ -5,7 +5,9 @@ import com.sensor.model.User;
 public interface UserDao {
     User findById(long id);
 
-    User save(User entity);
+    void save(User entity);
 
     void delete(User entity);
+
+    User findByLogin(String login);
 }

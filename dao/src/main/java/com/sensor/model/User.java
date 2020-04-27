@@ -4,33 +4,45 @@ import com.sensor.model.type.UserRole;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "user")
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
-@AttributeOverride(name = "id", column = @Column(columnDefinition = "integer"))
-public class User extends BaseEntity {
+@EqualsAndHashCode
+//@EqualsAndHashCode(callSuper = true)
+//@AttributeOverride(name = "id", column = @Column(columnDefinition = "integer"))
+public class User implements Serializable {
 
+//    @Override
+//    @Access(AccessType.PROPERTY)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userIdSequencer")
+//    @SequenceGenerator(name = "userIdSequencer", sequenceName = "user_id_seq", allocationSize = 1)
+//    public Long getId() {
+//        return super.getId();
+//    }
+
+
+    @Id
+    @Column
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userIdSequencer")
     @SequenceGenerator(name = "userIdSequencer", sequenceName = "user_id_seq", allocationSize = 1)
-    @Column(nullable = false)
-    @Access(AccessType.PROPERTY)
-    @Override
-    public Long getId() {
-        return super.getId();
-    }
+    private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String login;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
+    @Column
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "user_role")
+    @Type(type = "com.sensor.converter.type.UserRoleType")
     private UserRole role;
+
 }

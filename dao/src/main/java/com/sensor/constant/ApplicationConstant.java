@@ -16,4 +16,9 @@ public final class ApplicationConstant {
     public static final String TIMESTAMP = "timestamp";
     public static final String STATUS = "status";
     public static final String ERRORS = "errors";
+
+    public static final String LOGIN = "login";
+    public static final String ROLE_PREFIX = "ROLE_";
+    public static final String AUTHORIZATION = "Authorization";
+    public static final String JWT_PREFIX = "Bearer ";
 }

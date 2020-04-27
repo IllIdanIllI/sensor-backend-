@@ -1,6 +1,5 @@
 package com.sensor.dao;
 
-import com.sensor.model.BaseEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -11,11 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 @Repository
-public abstract class GenericDao<T extends BaseEntity, N> {
+public abstract class GenericDao<T extends Serializable, N> {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -65,8 +65,8 @@ public abstract class GenericDao<T extends BaseEntity, N> {
     }
 
     @Transactional
-    public T save(T entity) {
-        return (T) getSession().save(entity);
+    public void save(T entity) {
+        getSession().save(entity);
     }
 
     @Transactional
