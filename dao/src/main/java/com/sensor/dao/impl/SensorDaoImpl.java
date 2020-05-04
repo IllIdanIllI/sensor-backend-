@@ -3,6 +3,7 @@ package com.sensor.dao.impl;
 import com.sensor.dao.GenericDao;
 import com.sensor.dao.SensorDao;
 import com.sensor.model.Sensor;
+import com.sensor.model.transport.PaginateEntity;
 import com.sensor.model.type.SensorType;
 import com.sensor.model.type.UnitType;
 import org.apache.lucene.search.Query;
@@ -22,25 +23,26 @@ public class SensorDaoImpl extends GenericDao<Sensor, Long> implements SensorDao
 
     @Override
     @Transactional
-    public List<Sensor> findBySearchCriteria(String searchCriteria, int currentPage, int limit) {
+    public PaginateEntity<Sensor> findBySearchCriteria(String searchCriteria, int currentPage, int limit) {
         FullTextEntityManager fullTextEntityManager
                 = Search.getFullTextEntityManager(getSession());
         handleInterruptedException(fullTextEntityManager);
+        String[] requiredFields = defineFieldsForSearch(searchCriteria).toArray(String[]::new);
         QueryBuilder queryBuilder = fullTextEntityManager.getSearchFactory()
                 .buildQueryBuilder()
                 .forEntity(Sensor.class)
                 .get();
         Query query = queryBuilder
                 .keyword()
-                .fuzzy()
-                .onFields(defineFieldsForSearch(searchCriteria).toArray(String[]::new))
+                .onFields(requiredFields)
                 .matching(searchCriteria)
                 .createQuery();
         FullTextQuery jpaQuery
-                = fullTextEntityManager.createFullTextQuery(query, Sensor.class)
-                .setFirstResult(currentPage * limit)
+                = fullTextEntityManager.createFullTextQuery(query, Sensor.class);
+        int amount = jpaQuery.getResultSize();
+        jpaQuery.setFirstResult(currentPage * limit)
                 .setMaxResults(limit);
-        return (List<Sensor>) jpaQuery.getResultList();
+        return new PaginateEntity<>((List<Sensor>) jpaQuery.getResultList(), amount);
     }
 
     private List<String> defineFieldsForSearch(String searchCriteria) {

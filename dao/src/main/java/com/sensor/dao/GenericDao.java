@@ -70,6 +70,11 @@ public abstract class GenericDao<T extends Serializable, N> {
     }
 
     @Transactional
+    public void update(T entity) {
+        getSession().update(entity);
+    }
+
+    @Transactional
     public void delete(T entity) {
         getSession().delete(entity);
     }

@@ -13,6 +13,8 @@ import java.io.Serializable;
 @Builder
 public class SensorResponseDto implements Serializable {
 
+    private String id;
+
     private String name;
 
     private String model;

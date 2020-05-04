@@ -7,12 +7,14 @@ import com.sensor.model.type.UnitType;
 import com.vladmihalcea.hibernate.type.range.PostgreSQLRangeType;
 import com.vladmihalcea.hibernate.type.range.Range;
 import lombok.Data;
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.core.WhitespaceTokenizerFactory;
+import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilterFactory;
+import org.apache.lucene.analysis.ngram.EdgeNGramFilterFactory;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.FieldBridge;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.TermVector;
+import org.hibernate.search.annotations.*;
+import org.hibernate.search.annotations.Parameter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,6 +28,19 @@ import java.io.Serializable;
         defaultForType = Range.class
 )
 @Indexed
+@AnalyzerDef(name = "edgeNgram",
+        tokenizer = @TokenizerDef(factory = WhitespaceTokenizerFactory.class),
+        filters = {
+                @TokenFilterDef(factory = ASCIIFoldingFilterFactory.class),
+                @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+                @TokenFilterDef(
+                        factory = EdgeNGramFilterFactory.class,
+                        params = {
+                                @Parameter(name = "minGramSize", value = "1"),
+                                @Parameter(name = "maxGramSize", value = "10")
+                        }
+                )
+        })
 public class Sensor implements Serializable {
 
     @Id
@@ -34,10 +49,12 @@ public class Sensor implements Serializable {
     @SequenceGenerator(name = "sensorIdSequencer", sequenceName = "sensor_id_seq", allocationSize = 1)
     private Long id;
 
+    @Analyzer(definition = "edgeNgram")
     @Column(nullable = false)
     @Field
     private String name;
 
+    @Analyzer(definition = "edgeNgram")
     @Column(nullable = false)
     @Field
     private String model;
@@ -45,22 +62,26 @@ public class Sensor implements Serializable {
     @Column
     private Range<Integer> range;
 
+    @Analyzer(definition = "edgeNgram")
     @Column
     @Field
     private String location;
 
+    @Analyzer(definition = "edgeNgram")
     @Column
     @Enumerated(EnumType.STRING)
     @Type(type = "com.sensor.converter.type.UnitEnumType")
     @Field(bridge = @FieldBridge(impl = UnitTypeBridge.class))
     private UnitType unit;
 
+    @Analyzer(definition = "edgeNgram")
     @Column
     @Enumerated(EnumType.STRING)
     @Type(type = "com.sensor.converter.type.SensorEnumType")
     @Field(bridge = @FieldBridge(impl = SensorTypeBridge.class))
     private SensorType type;
 
+    @Analyzer(definition = "edgeNgram")
     @Column
     @Field(termVector = TermVector.YES)
     private String description;

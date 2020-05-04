@@ -7,6 +7,7 @@ import com.sensor.dto.responce.SensorResponseDto;
 import com.sensor.exception.SensorValidationException;
 import com.sensor.mapper.EntityMapper;
 import com.sensor.model.Sensor;
+import com.sensor.model.transport.PaginateEntity;
 import com.sensor.service.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,11 +35,12 @@ public class SensorServiceImpl implements SensorService {
     @Override
     @Transactional
     public PaginationResponseDto<SensorResponseDto> findBySearchCriteria(String searchCriteria, int currentPage, int limit) {
-        List<Sensor> sensors = dao.findBySearchCriteria(searchCriteria, currentPage, limit);
+        PaginateEntity<Sensor> entity = dao.findBySearchCriteria(searchCriteria, currentPage, limit);
+        List<Sensor> sensors = entity.getEntities();
         List<SensorResponseDto> dtos = sensors.stream()
                 .map(sensor -> sensorResponseDtoMapper.map(sensor))
                 .collect(Collectors.toList());
-        long recordsAmount = dao.findEntitiesAmountPagination();
+        long recordsAmount = entity.getEntitiesAmount();
         long pageAmount = (recordsAmount % limit == 0)
                 ? recordsAmount / limit
                 : recordsAmount / limit + 1;
@@ -60,7 +62,7 @@ public class SensorServiceImpl implements SensorService {
         }
         Sensor sensor = sensorRequestDtoMapper.map(dto);
         sensor.setId(id);
-        dao.save(sensor);
+        dao.update(sensor);
     }
 
     @Override
