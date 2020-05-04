@@ -8,7 +8,7 @@ public class ApplicationInitializer extends
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{HibernateConfiguration.class, ApplicationSecurityConfiguration.class, WebConfiguration.class};
+        return new Class[]{HibernateConfiguration.class, ApplicationSecurityConfiguration.class, WebConfiguration.class, ServiceConfiguration.class};
     }
 
     @Override

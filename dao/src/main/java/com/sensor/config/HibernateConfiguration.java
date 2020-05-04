@@ -23,13 +23,13 @@ import static com.sensor.constant.ApplicationConstant.PATH_TO_PACKAGE_TO_SCAN;
 @PropertySource("classpath:application.properties")
 public class HibernateConfiguration {
 
-    @Value(value = "${postgers.url}")
+    @Value(value = "${postgres.url}")
     private String url;
-    @Value(value = "${postgers.user}")
+    @Value(value = "${postgres.user}")
     private String user;
-    @Value(value = "${postgers.driver}")
+    @Value(value = "${postgres.driver}")
     private String driver;
-    @Value(value = "${postgers.password}")
+    @Value(value = "${postgres.password}")
     private String password;
     @Value(value = "${hibernate.dialect}")
     private String dialect;
