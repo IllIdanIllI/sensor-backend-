@@ -4,6 +4,7 @@ import com.sensor.dto.request.SensorRequestDto;
 import com.sensor.dto.responce.PaginationResponseDto;
 import com.sensor.dto.responce.SensorResponseDto;
 import com.sensor.service.SensorService;
+import com.sensor.util.encoder.ApplicationCoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,11 +24,14 @@ public class SensorController {
 
     @Autowired
     private SensorService service;
+    @Autowired
+    private ApplicationCoder<Long, String> coder;
 
     @GetMapping(value = "/sensors/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('VIEWER')")
-    public ResponseEntity<SensorResponseDto> getUsers(@PathVariable Long id) {
-        SensorResponseDto responseDto = service.findById(id);
+    public ResponseEntity<SensorResponseDto> getUsers(@PathVariable String id) {
+        Long realId = coder.decode(id);
+        SensorResponseDto responseDto = service.findById(realId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
@@ -50,8 +54,9 @@ public class SensorController {
 
     @PutMapping(value = "/sensors/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity updateById(@PathVariable Long id, @Valid @RequestBody SensorRequestDto dto) {
-        service.update(id, dto);
+    public ResponseEntity updateById(@PathVariable String id, @Valid @RequestBody SensorRequestDto dto) {
+        Long realId = coder.decode(id);
+        service.update(realId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -66,8 +71,9 @@ public class SensorController {
 
     @DeleteMapping(value = "/sensors/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity deleteById(@PathVariable Long id) {
-        service.delete(id);
+    public ResponseEntity deleteById(@PathVariable String id) {
+        Long realId = coder.decode(id);
+        service.delete(realId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
