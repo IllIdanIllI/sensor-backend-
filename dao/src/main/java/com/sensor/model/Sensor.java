@@ -37,7 +37,7 @@ import java.io.Serializable;
                         factory = EdgeNGramFilterFactory.class,
                         params = {
                                 @Parameter(name = "minGramSize", value = "1"),
-                                @Parameter(name = "maxGramSize", value = "10")
+                                @Parameter(name = "maxGramSize", value = "2")
                         }
                 )
         })

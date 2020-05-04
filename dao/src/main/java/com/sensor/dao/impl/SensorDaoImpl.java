@@ -35,7 +35,7 @@ public class SensorDaoImpl extends GenericDao<Sensor, Long> implements SensorDao
         Query query = queryBuilder
                 .keyword()
                 .onFields(requiredFields)
-                .matching(searchCriteria)
+                .matching(searchCriteria )
                 .createQuery();
         FullTextQuery jpaQuery
                 = fullTextEntityManager.createFullTextQuery(query, Sensor.class);
