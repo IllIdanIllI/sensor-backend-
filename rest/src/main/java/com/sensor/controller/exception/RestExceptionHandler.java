@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,6 +27,7 @@ import static com.sensor.constant.ApplicationConstant.*;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String CREDENTIALS_EXCEPTION = "CredentialsException";
+    private static final String CONSTRAINT_VIOLATION_EXCEPTION = "ConstraintViolationException";
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -43,14 +46,26 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public final ResponseEntity<ErrorDetails> handleException(RuntimeException e, WebRequest request) {
+    public final ResponseEntity<ErrorDetails> handleException(RuntimeException e) {
         LocalDateTime currentTime = LocalDateTime.now();
         ErrorDetails errorDetails = new ErrorDetails(currentTime, e.getMessage(), e.toString());
         switch (e.getClass().getSimpleName()) {
             case CREDENTIALS_EXCEPTION:
                 return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+            case CONSTRAINT_VIOLATION_EXCEPTION:
+                return handleConstraintViolationException(e);
             default:
                 return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private ResponseEntity<ErrorDetails> handleConstraintViolationException(RuntimeException e) {
+        String errorMessages = ((ConstraintViolationException) e).getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .reduce((a, b) -> a.concat("\n").concat(b))
+                .orElse("No errors");
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), errorMessages, e.toString());
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 }

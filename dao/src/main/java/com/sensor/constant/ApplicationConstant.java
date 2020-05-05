@@ -21,4 +21,7 @@ public final class ApplicationConstant {
     public static final String ROLE_PREFIX = "ROLE_";
     public static final String AUTHORIZATION = "Authorization";
     public static final String JWT_PREFIX = "Bearer ";
+
+    public static final String VALIDATION_MAX_PAGE = "You have increased max page value";
+    public static final String VALIDATION_MAX_LIMIT = "You have increased the limit";
 }
