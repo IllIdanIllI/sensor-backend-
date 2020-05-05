@@ -12,6 +12,7 @@ import com.sensor.service.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class SensorServiceImpl implements SensorService {
         long pageAmount = (recordsAmount % limit == 0)
                 ? recordsAmount / limit
                 : recordsAmount / limit + 1;
-        return new PaginationResponseDto(dtos, pageAmount);
+        return new PaginationResponseDto<>(dtos, pageAmount);
     }
 
     @Override
@@ -80,10 +81,14 @@ public class SensorServiceImpl implements SensorService {
         List<SensorResponseDto> dtos = sensors.stream()
                 .map(sensor -> sensorResponseDtoMapper.map(sensor))
                 .collect(Collectors.toList());
-        long recordsAmount = dao.findEntitiesAmountPagination();
-        long pageAmount = (recordsAmount % limit == 0)
-                ? recordsAmount / limit
-                : recordsAmount / limit + 1;
-        return new PaginationResponseDto(dtos, pageAmount);
+        long recordsAmount;
+        long pageAmount = 0;
+        if (!CollectionUtils.isEmpty(dtos)) {
+            recordsAmount = dao.findEntitiesAmountPagination();
+            pageAmount = (recordsAmount % limit == 0)
+                    ? recordsAmount / limit
+                    : recordsAmount / limit + 1;
+        }
+        return new PaginationResponseDto<>(dtos, pageAmount);
     }
 }
